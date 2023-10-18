@@ -109,7 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-log.txt
+
 
 # Spyder project settings
 .spyderproject
@@ -150,4 +150,6 @@ dmypy.json
 static/
 posts/static/
 media/
+log.txt
+
 

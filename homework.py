@@ -120,7 +120,10 @@ def main():
             response = get_api_answer(current_timestamp)
             current_timestamp = response.get('current_data', current_timestamp)
             new_homeworks = check_response(response)
-            if new_homeworks:
+            if not new_homeworks:
+                logging.info("Список 'homeworks' пуст.")
+                continue
+            if new_homeworks and len(new_homeworks) > 0:
                 homework = new_homeworks[0]
                 current_report['name'] = homework.get('homework_name')
             else:
