@@ -8,6 +8,7 @@ import exceptions
 from dotenv import load_dotenv
 from http import HTTPStatus
 
+
 load_dotenv()
 
 PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
@@ -38,8 +39,7 @@ def send_message(bot, message):
         raise exceptions.TelegramError(
             f'Не удалось отправить сообщение {error}'
         )
-    else:
-        logging.debug(f'Сообщение отправлено {message}')
+    logging.debug(f'Сообщение отправлено {message}')
 
 
 def get_api_answer(current_timestamp):
@@ -77,12 +77,18 @@ def check_response(response):
     """Проверить валидность ответа."""
     logging.debug('Начало проверки')
     if not isinstance(response, dict):
-        raise TypeError('Ошибка в типе ответа API')
+        error_msg = 'Ошибка в типе ответа API'
+        logging.error(error_msg)
+        raise TypeError(error_msg)
     if 'homeworks' not in response or 'current_date' not in response:
-        raise exceptions.EmptyResponseFromAPI('Пустой ответ от API')
+        error_msg = 'Пустой ответ от API'
+        logging.error(error_msg)
+        raise exceptions.EmptyResponseFromAPI(error_msg)
     homeworks = response.get('homeworks')
     if not isinstance(homeworks, list):
-        raise TypeError('Homeworks не является списком')
+        error_msg = 'Homeworks не является списком'
+        logging.error(error_msg)
+        raise TypeError(error_msg)
     return homeworks
 
 
@@ -95,9 +101,8 @@ def parse_status(homework):
     if homework_status not in HOMEWORK_VERDICTS:
         raise ValueError(f'Неизвестный статус работы - {homework_status}')
     return (
-        'Изменился статус проверки работы "{homework_name}" {verdict}'
-    ).format(
-        homework_name=homework_name, verdict=HOMEWORK_VERDICTS[homework_status]
+        f'Изменился статус проверки работы "{homework_name}"'
+        f' {HOMEWORK_VERDICTS[homework_status]}'
     )
 
 
